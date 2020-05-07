@@ -1,10 +1,26 @@
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
+import styled from 'styled-components'
+
+const LogoutLink = styled.span`
+  color: white;
+  cursor:pointer;
+  &:hover{
+    text-decoration:underline;
+  }
+`
 
 const Header = ({ siteTitle }) => {
+
+  const [user, initialising, error] = useAuthState(firebase.auth());
+
+  async function handleLogoutClick() {
+    await firebase.auth().signOut()
+    navigate('/login')
+  }
   
   return (
     <header
@@ -18,6 +34,7 @@ const Header = ({ siteTitle }) => {
           margin: `0 auto`,
           maxWidth: 960,
           padding: `1.45rem 1.0875rem`,
+          display: `flex`
         }}
       >
         <h1 style={{ margin: 0 }}>
@@ -31,6 +48,22 @@ const Header = ({ siteTitle }) => {
             {siteTitle}
           </Link>
         </h1>
+        <div>
+          {(!initialising && user) && 
+            <div>
+              Hello, {user.email}
+              <LogoutLink onClick={handleLogoutClick}>
+                Logout
+              </LogoutLink>
+            </div>}
+           {(!initialising && !user) &&
+            <div>
+              <Link to="/login">
+                Login
+              </Link>
+            </div>
+           } 
+        </div>
       </div>
     </header>
   )

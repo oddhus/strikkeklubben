@@ -6,10 +6,6 @@ require("dotenv").config({
   path: `.env.${activeEnv}`,
 })
 
-
-
-console.log("????????????????",`${process.env.GATSBY_API_KEY}`)
-
 module.exports = {
   apiKey: `${process.env.GATSBY_API_KEY}`,
   authDomain: `${process.env.GATSBY_AUTH_DOMAIN}`,
