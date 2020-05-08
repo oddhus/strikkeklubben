@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-
 import Layout from "../components/layout"
 import ProjectItem from "../components/ProjectItem"
 import { node } from "prop-types"
