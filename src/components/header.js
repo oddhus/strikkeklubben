@@ -13,6 +13,46 @@ const LogoutLink = styled.span`
   }
 `
 
+const HeaderWrapper = styled.header`
+  background: rebeccapurple;
+  margin-bottom: 1.45rem
+`
+
+const HeaderContent = styled.div`
+  margin: 0 auto;
+  maxWidth: 960;
+  padding: 1.45rem 1.0875rem;
+  display: flex;
+
+  >h1{
+    margin: 0;
+    flex-grow: 1;
+    >a{
+    color: white;
+    text-decoration: none;
+    }
+  }
+
+  >div{
+    margin: auto 0;
+  }
+`
+
+const UserInfo = styled.div`
+  text-align: right;
+  color: white;
+  >p{
+    margin-bottom: 0
+  }
+`
+
+const LoginLink = styled.div`
+  text-align: right;
+  >a{
+    color: white
+  }
+`
+
 const Header = ({ siteTitle }) => {
 
   const [user, initialising, error] = useAuthState(firebase.auth());
@@ -23,49 +63,31 @@ const Header = ({ siteTitle }) => {
   }
   
   return (
-    <header
-      style={{
-        background: `rebeccapurple`,
-        marginBottom: `1.45rem`,
-      }}
-    >
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `1.45rem 1.0875rem`,
-          display: `flex`
-        }}
-      >
-        <h1 style={{ margin: 0 }}>
-          <Link
-            to="/"
-            style={{
-              color: `white`,
-              textDecoration: `none`,
-            }}
-          >
+    <HeaderWrapper>
+      <HeaderContent>
+        <h1>
+          <Link to="/">
             {siteTitle}
           </Link>
         </h1>
         <div>
           {(!initialising && user) && 
-            <div>
-              Hello, {user.email}
+            <UserInfo>
+              <p>Hello, {user.email}</p>
               <LogoutLink onClick={handleLogoutClick}>
                 Logout
               </LogoutLink>
-            </div>}
+            </UserInfo>}
            {(!initialising && !user) &&
-            <div>
+            <LoginLink>
               <Link to="/login">
                 Login
               </Link>
-            </div>
+            </LoginLink>
            } 
         </div>
-      </div>
-    </header>
+        </HeaderContent>
+    </HeaderWrapper>
   )
 }
 
