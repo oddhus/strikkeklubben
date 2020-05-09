@@ -1,11 +1,9 @@
 import React from "react"
-import { Link, navigate } from "gatsby"
+import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
-import {Form} from '../components/Common/Form'
-import {Input} from '../components/Common/Input'
-import {Button} from '../components/Common/Button'
+import {Form, Input, Button} from '../components/Common/Index'
 
 import Layout from "../components/layout"
 
@@ -34,15 +32,13 @@ const Login = () => {
 
   return (
     <Layout>
-    <h1>Login</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
           <Input name="email" placeholder="email" ref={register({required: true})} />
           {errors.email && "Email is required"}
           <Input name="password" placeholder="password" type="password" ref={register({required: true})} />
           {errors.password && "Password is required"}
-          <Button type="submit" value="Login"/>
+          <Button type="submit" value="Login" block/>
       </Form>
-      <Link to="/">Go back to the homepage</Link>
     </Layout>
   );
 }

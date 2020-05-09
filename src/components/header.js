@@ -5,6 +5,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 import styled from 'styled-components'
 
+const Divider = styled.span`
+  margin: 0 8px;
+  padding-right: 1px;
+  background: #ddd;
+`
+
 const LogoutLink = styled.span`
   color: white;
   cursor:pointer;
@@ -82,6 +88,10 @@ const Header = ({ siteTitle }) => {
             <LoginLink>
               <Link to="/login">
                 Login
+              </Link>
+              <Divider />
+              <Link to="/register">
+                Register
               </Link>
             </LoginLink>
            } 

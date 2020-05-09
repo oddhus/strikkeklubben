@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 
 import Layout from "../components/layout"
+import {Form, Input, Button} from '../components/Common/Index'
 
 const Register = () => {
   const { register, handleSubmit, errors } = useForm()
@@ -41,14 +42,14 @@ const Register = () => {
   return (
   
     <Layout>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input placeholder="username" type="text" name="username" ref={register({ required: true })} />
-        <input placeholder="email" type="email" name="email" ref={register({ required: true })} />
-        <input placeholder="password" type="password" name="password" ref={register({ required: true })} />
-        <input placeholder="confirm password" type="password" name="confirmPassword" ref={register({ required: true })} />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input placeholder="username" type="text" name="username" ref={register({ required: true })} />
+        <Input placeholder="email" type="email" name="email" ref={register({ required: true })} />
+        <Input placeholder="password" type="password" name="password" ref={register({ required: true })} />
+        <Input placeholder="confirm password" type="password" name="confirmPassword" ref={register({ required: true })} />
 
-        <input type="submit" value="Register" />
-      </form>
+        <Button type="submit" value="Register" block/>
+      </Form>
     </Layout>
   )
 }
