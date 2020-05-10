@@ -5,6 +5,7 @@ export const Button = styled.input`
     border-radius:4px;
     color: white;
     cursor: pointer;
+    margin-top: 12px;
     padding: 8px 16px;
     ${props => props.block ? 'display: block; width: 100%;' : ''}
 
@@ -30,4 +31,15 @@ export const Input = styled.input`
     &:focus, &active{
         border: 1px solid rebeccapurple;
     }
+`
+
+export const ErrorMsg = styled.p`
+  color: #707070;
+  font-size: small;
+  font-style: italic;
+  margin-top: -6px;
+  margin-left: 6px;
+  margin-bottom: 8px;
+  padding: 0;
+  }
 `

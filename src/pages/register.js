@@ -3,20 +3,9 @@ import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
-import styled from 'styled-components'
 
 import Layout from "../components/layout"
-import {Form, Input, Button} from '../components/Common/Index'
-
-const ErrorMsg = styled.p`
-  color: #707070;
-  font-size: small;
-  font-style: italic;
-  margin-top: -6px;
-  margin-bottom: 8px;
-  padding: 0;
-  }
-`
+import { ErrorMsg, Form, Input, Button } from '../components/Common/Index'
 
 const Register = () => {
   const { register, handleSubmit, errors, watch } = useForm()
