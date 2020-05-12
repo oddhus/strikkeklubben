@@ -19,10 +19,15 @@ const Register = () => {
       firebase.auth().createUserWithEmailAndPassword(
         data.email,
         data.password
-      ).then(user => {
-        firebase.firestore().collection('users').doc(!user.user.uid).set({
-          username: data.username,
-          email: data.email
+      ).then(userData => {
+        userData.user.updateProfile({
+          displayName: data.username,
+          photoURL: ''
+        }).then(()=> {
+          firebase.firestore().collection('users').doc(userData.user.uid).set({
+            username: data.username,
+            email: data.email
+          })
         }).then(() => {
           navigate(`/`)
         })

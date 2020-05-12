@@ -1,7 +1,8 @@
 import { Link, navigate } from "gatsby"
 import PropTypes from "prop-types"
-import React from "react"
+import React, { useState } from "react"
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollectionData } from 'react-firebase-hooks/firestore'
 import firebase from "gatsby-plugin-firebase"
 import styled from 'styled-components'
 
@@ -61,13 +62,23 @@ const LoginLink = styled.div`
 
 const Header = ({ siteTitle }) => {
 
-  const [user, initialising, error] = useAuthState(firebase.auth());
+  const [user, initialising, error] = useAuthState(firebase.auth())
+  const [userName, setuserName] = useState("")
+
+  // if (!userName && !initialising && user) {
+  //   firebase.firestore()
+  //     .collection('users')
+  //     .doc(user.uid).get()
+  //     .then(doc => {
+  //       setuserName(doc.data().username)
+  //     })
+  // }
 
   async function handleLogoutClick() {
     await firebase.auth().signOut()
     navigate('/login')
   }
-  
+
   return (
     <HeaderWrapper>
       <HeaderContent>
@@ -79,7 +90,7 @@ const Header = ({ siteTitle }) => {
         <div>
           {(!initialising && user) && 
             <UserInfo>
-              <p>Hello, {user.email}</p>
+              <p>Hello, {user.displayName || user.email}</p>
               <LogoutLink onClick={handleLogoutClick}>
                 Logout
               </LogoutLink>

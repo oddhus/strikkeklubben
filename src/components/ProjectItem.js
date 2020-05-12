@@ -30,7 +30,6 @@ const ProjectItemContentWrapper = styled.div`
 `
 
 const ProjectItem = ({author, title, description, children, cover}) => {
-    console.log(cover)
     return (
         <ProjectItemWrapper>
             <ProjectItemImageWrapper>
