@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from "gatsby"
 import Layout from '../components/layout'
 import ProjectItem from '../components/ProjectItem'
+import { ProjectComments } from '../components/Common/ProjectComments'
 
 const ProjectTemplate = (props) => {
     console.log(props.data)
@@ -14,6 +15,7 @@ const ProjectTemplate = (props) => {
                 description={props.data.projects.description}
             >
             </ProjectItem>
+            <ProjectComments id={props.data.projects.uid}/>
         </Layout>
     )
 }
