@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import firebase from "gatsby-plugin-firebase"
+import moment from 'moment'
 import { useForm } from 'react-hook-form'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore'
@@ -23,10 +24,21 @@ const CommentForm = styled.form`
 `
 
 const CommentListItem = styled.div`
-  >strong{
+  >div {
+    display: flex;
+    justify-content: space-between;
+
+    >strong{
       color: 666;
       font-size: 80%;
+    }
+
+    >p{
+      color: #ddd;
+      font-size: 80%;
+    }
   }
+  
 
   border-bottom: 1px solid #ddd;
   padding: 4px 0;
@@ -47,12 +59,11 @@ export const ProjectComments = ({ id }) => {
   const [dbError, setDbError] = useState(null)
 
   async function onSubmit(data){
-    console.log(data)
-    const postComment = firebase.functions().httpsCallable('postComment')
-    postComment({message: data.message,id}).catch((error) => {
+    firebase.functions()
+    .httpsCallable('postComment')({message: data.message,id})
+    .catch((error) => {
       console.log(error)
     })
-
   }
 
   if (loading) {
@@ -65,13 +76,16 @@ export const ProjectComments = ({ id }) => {
     <div>
       <CommentForm onSubmit={handleSubmit(onSubmit)}>
         <Input name="message" placeholder="Comment" ref={register({required: true})} />
-        {errors.message && <ErrorMsg>Password is required</ErrorMsg>}
+        {errors.message && <ErrorMsg>The message cannot be empty</ErrorMsg>}
         {dbError && <ErrorMsg>{dbError}</ErrorMsg>}
         <Button type="submit" value="Post Comment" />
       </CommentForm>  
       {data.map(comment => (
         <CommentListItem key={comment.id}>
-          <strong>{comment.author}</strong>
+          <div>
+            <strong>{comment.author}</strong>
+            {comment.createdAt && <p>{moment.unix(comment.createdAt.seconds).fromNow()}</p>}
+          </div>
           <div>{comment.message}</div>
         </CommentListItem>
       ))}
