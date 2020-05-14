@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import styled from 'styled-components'
 
-import { ErrorMsg, Input, Button } from '../../components/Common/Index'
+import { ErrorMsg, Input, Button } from './FormElements'
 
 const CommentForm = styled.form`
   display: flex;
@@ -36,9 +36,9 @@ const CommentListItem = styled.div`
     >p{
       color: #ddd;
       font-size: 80%;
+      margin: 0;
     }
   }
-  
 
   border-bottom: 1px solid #ddd;
   padding: 4px 0;
@@ -49,7 +49,11 @@ export const ProjectComments = ({ id }) => {
   const { register, handleSubmit, errors } = useForm()
   const [user, initialising, authError] = useAuthState(firebase.auth())
   const [data, loading, dataError] = useCollectionData(
-    firebase.firestore().collection('projects').doc(id).collection('comments'),
+    firebase.firestore()
+      .collection('projects')
+      .doc(id)
+      .collection('comments')
+      .orderBy('createdAt', 'desc'),
     {
       idField: "id",
       snapshotListenOptions: { includeMetadataChanges: true },

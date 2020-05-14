@@ -3,7 +3,7 @@ import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
-import { ErrorMsg, Form, Input, Button } from '../components/Common/Index'
+import { ErrorMsg, Form, Input, Button } from '../components/Common/FormElements'
 
 import Layout from "../components/layout"
 

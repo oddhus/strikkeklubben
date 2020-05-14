@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 
 import Layout from "../components/layout"
-import { ErrorMsg, Form, Input, Button } from '../components/Common/Index'
+import { ErrorMsg, Form, Input, Button } from '../components/Common/FormElements'
 
 const Register = () => {
   const { register, handleSubmit, errors, watch } = useForm()
@@ -35,6 +35,12 @@ const Register = () => {
         setDbError(error.message)
       })
   }
+
+  async function validate(value){
+    const user = await firebase.firestore().collection('users').where('username','==',value).get()
+    return user.empty
+  }
+
   if (initialising) {
     return (
       <Layout>
@@ -46,15 +52,19 @@ const Register = () => {
   if (user) {
     navigate(`/`)
   }
-
   console.log(errors)
-
   return (
   
     <Layout>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input placeholder="Username" type="text" name="username" ref={register({ required: "Username is required" })} />
+        <Input placeholder="Username" type="text" name="username" 
+          ref={register({ 
+            required: "Username is required",
+            validate: async value => await validate(value)
+            })}
+        />
         {errors.username && <ErrorMsg>{errors.username.message}</ErrorMsg>}
+        {errors.username && errors.username.type === 'validate' && <ErrorMsg>Username is taken</ErrorMsg>}
         <Input placeholder="Email" type="email" name="email" ref={register({ required: "Email is required" })} />
         {errors.email && <ErrorMsg>{errors.email.message}</ErrorMsg>}
         <Input placeholder="Password" type="password" name="password" 
