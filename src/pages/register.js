@@ -15,25 +15,15 @@ const Register = () => {
   const [user, initialising, error] = useAuthState(firebase.auth())
   const [dbError, setDbError] = useState(null)
 
-  function onSubmit(data){
-      firebase.auth().createUserWithEmailAndPassword(
-        data.email,
-        data.password
-      ).then(userData => {
-        userData.user.updateProfile({
-          displayName: data.username,
-          photoURL: ''
-        }).then(()=> {
-          firebase.firestore().collection('users').doc(userData.user.uid).set({
-            username: data.username,
-            email: data.email
-          })
-        }).then(() => {
-          navigate(`/`)
-        })
-      }).catch(error => {
-        setDbError(error.message)
-      })
+  function onSubmit({email, password, username}){
+    firebase.auth().createUserWithEmailAndPassword(email, password).then((userProfile) => {
+      userProfile.user.updateProfile({displayName: username})
+      firebase.functions().httpsCallable('createPublicProfile')({email,username})
+    }).then(()=> {
+      navigate(`/`)
+    }).catch((error) => {
+      setDbError(error.message)
+    })
   }
 
   async function validate(value){

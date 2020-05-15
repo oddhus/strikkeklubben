@@ -63,16 +63,6 @@ const LoginLink = styled.div`
 const Header = ({ siteTitle }) => {
 
   const [user, initialising, error] = useAuthState(firebase.auth())
-  const [userName, setuserName] = useState("")
-
-  // if (!userName && !initialising && user) {
-  //   firebase.firestore()
-  //     .collection('users')
-  //     .doc(user.uid).get()
-  //     .then(doc => {
-  //       setuserName(doc.data().username)
-  //     })
-  // }
 
   async function handleLogoutClick() {
     await firebase.auth().signOut()

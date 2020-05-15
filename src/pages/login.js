@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -10,7 +10,6 @@ import Layout from "../components/layout"
 const Login = () => {
   const { register, handleSubmit, errors } = useForm()
   const [user, initialising, error] = useAuthState(firebase.auth())
-
   const [dbError, setDbError] = useState(null)
 
   function onSubmit(data){
