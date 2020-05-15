@@ -46,7 +46,7 @@ const CommentListItem = styled.div`
 
 export const ProjectComments = ({ id }) => {
 
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, reset } = useForm()
   const [user, initialising, authError] = useAuthState(firebase.auth())
   const [data, loading, dataError] = useCollectionData(
     firebase.firestore()
@@ -64,10 +64,14 @@ export const ProjectComments = ({ id }) => {
 
   async function onSubmit(data){
     firebase.functions()
-    .httpsCallable('postComment')({message: data.message,id})
+    .httpsCallable('postComment')({
+      message: data.message,
+      id,
+      username: user.displayName})
     .catch((error) => {
       console.log(error)
     })
+    reset()
   }
 
   if (loading) {

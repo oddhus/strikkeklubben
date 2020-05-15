@@ -12,6 +12,12 @@ const Divider = styled.span`
   background: #ddd;
 `
 
+const VertifiedUserLink = styled.span`
+  >a{
+    color: white;
+  }  
+`
+
 const LogoutLink = styled.span`
   color: white;
   cursor:pointer;
@@ -81,9 +87,17 @@ const Header = ({ siteTitle }) => {
           {(!initialising && user) && 
             <UserInfo>
               <p>Hello, {user.displayName || user.email}</p>
-              <LogoutLink onClick={handleLogoutClick}>
-                Logout
-              </LogoutLink>
+              <div>
+                {user.emailVerified &&
+                  <VertifiedUserLink>
+                    <Link to="/add-project">Add project</Link>
+                  </VertifiedUserLink>
+                }
+                <Divider />
+                <LogoutLink onClick={handleLogoutClick}>
+                  Logout
+                </LogoutLink>
+              </div>
             </UserInfo>}
            {(!initialising && !user) &&
             <LoginLink>

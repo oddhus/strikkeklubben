@@ -43,3 +43,17 @@ export const ErrorMsg = styled.p`
   padding: 0;
   }
 `
+
+export const TextArea = styled.textarea`
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    border-radius:4px;
+    rows: 9;
+
+    &:focus, &active{
+        border: 1px solid rebeccapurple;
+    }
+`

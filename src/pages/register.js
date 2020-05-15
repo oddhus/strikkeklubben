@@ -17,6 +17,7 @@ const Register = () => {
 
   function onSubmit({email, password, username}){
     firebase.auth().createUserWithEmailAndPassword(email, password).then((userProfile) => {
+      userProfile.user.sendEmailVerification()
       userProfile.user.updateProfile({displayName: username})
       firebase.functions().httpsCallable('createPublicProfile')({email,username})
     }).then(()=> {
