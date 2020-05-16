@@ -5,7 +5,6 @@ import ProjectItem from '../components/ProjectItem'
 import { ProjectComments } from '../components/Common/ProjectComments'
 
 const ProjectTemplate = (props) => {
-    console.log(props.data)
     return (
         <Layout>
             <ProjectItem

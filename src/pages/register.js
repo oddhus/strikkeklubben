@@ -43,9 +43,8 @@ const Register = () => {
   if (user) {
     navigate(`/`)
   }
-  console.log(errors)
+
   return (
-  
     <Layout>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input placeholder="Username" type="text" name="username" 
