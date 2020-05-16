@@ -70,8 +70,8 @@ const Header = ({ siteTitle }) => {
 
   const [user, initialising, error] = useAuthState(firebase.auth())
 
-  async function handleLogoutClick() {
-    await firebase.auth().signOut()
+  function handleLogoutClick() {
+    firebase.auth().signOut()
     navigate('/login')
   }
 

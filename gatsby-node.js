@@ -12,15 +12,14 @@ exports.onCreateNode = async ({ actions, createContentDigest, createNodeId }) =>
       .where('isPublic','==',true)
       .get()
   
-  const test = data.docs.map(doc => {
-    console.log(doc.id)
+  const photos = data.docs.map(doc => {
     return {
       uid: doc.id,
       ...doc.data()
     }
   })
 
-  for (const photo of test) {
+  for (const photo of photos) {
     try {
       const node = {
         ...photo, // We copy all of the properties from the game object
