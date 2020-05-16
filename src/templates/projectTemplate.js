@@ -1,22 +1,21 @@
 import React from 'react'
 import { graphql } from "gatsby"
-import Layout from '../components/layout'
 import ProjectItem from '../components/ProjectItem'
 import { ProjectComments } from '../components/Common/ProjectComments'
 
 const ProjectTemplate = (props) => {
-    return (
-        <Layout>
-            <ProjectItem
-                cover={props.data.projects.localImage.childImageSharp.fixed}
-                title={props.data.projects.title}
-                author={props.data.projects.author}
-                description={props.data.projects.description}
-            >
-            </ProjectItem>
-            <ProjectComments id={props.data.projects.uid}/>
-        </Layout>
-    )
+  return (
+    <>
+      <ProjectItem
+        cover={props.data.projects.localImage.childImageSharp.fixed}
+        title={props.data.projects.title}
+        author={props.data.projects.author}
+        description={props.data.projects.description}
+      >
+      </ProjectItem>
+      <ProjectComments id={props.data.projects.uid} />
+    </>
+  )
 }
 
 export const query = graphql`
