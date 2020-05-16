@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import { useAuthState } from 'react-firebase-hooks/auth';
