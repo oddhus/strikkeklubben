@@ -1,13 +1,20 @@
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV || "production"}`,
+})
+
 const path = require('path')
-const firebase = require('firebase');
-const config = require('./firebase')
-const app = firebase.initializeApp(config);
+const admin = require('firebase-admin')
+const serviceAccount = require("./firebase.js")
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://mine-strikkeoppskrifter.firebaseio.com"
+});
 
 exports.onCreateNode = async ({ actions, createContentDigest, createNodeId }) => {
   const { createNode } = actions
 
-  const data = await app
-      .firestore()
+  const data = await admin.firestore()
       .collection('projects')
       .where('isPublic','==',true)
       .get()

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 
-import Layout from "../components/layout"
 import { ErrorMsg, Form, Input, Button } from '../components/Common/FormElements'
 
 const Register = () => {
@@ -34,9 +33,9 @@ const Register = () => {
 
   if (initialising) {
     return (
-      <Layout>
+      <>
         <p>Loading...</p>
-      </Layout>
+      </>
     );
   }
 
@@ -45,7 +44,7 @@ const Register = () => {
   }
 
   return (
-    <Layout>
+    <>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input placeholder="Username" type="text" name="username" 
           ref={register({ 
@@ -78,7 +77,7 @@ const Register = () => {
         {dbError && <ErrorMsg>{dbError}</ErrorMsg>}
         <Button type="submit" value="Register" block/>
       </Form>
-    </Layout>
+    </>
   )
 }
 
