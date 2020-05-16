@@ -23,9 +23,9 @@ const Login = () => {
 
   if (initialising) {
     return (
-      <Layout>
+      <>
         <p>Loading user...</p>
-      </Layout>
+      </>
     )
   }
 
@@ -34,7 +34,7 @@ const Login = () => {
   }
 
   return (
-    <Layout>
+    <>
       <Form onSubmit={handleSubmit(onSubmit)}>
           <Input name="email" placeholder="email" ref={register({required: true})} />
           {errors.email && <ErrorMsg>Email is required</ErrorMsg>}
@@ -43,7 +43,7 @@ const Login = () => {
           {dbError && <ErrorMsg>{dbError}</ErrorMsg>}
           <Button type="submit" value="Login" block/>
       </Form>
-    </Layout>
+    </>
   );
 }
 

@@ -34,7 +34,7 @@ const IndexPage = (props) => {
     }
   );
 
-  return (<Layout>
+  return (<>
     {props.data.allProjects.edges.map(project => (
       <ProjectItem
         cover={project.node.localImage.childImageSharp.fixed}
@@ -63,7 +63,7 @@ const IndexPage = (props) => {
         </LinkButton>
       </ProjectItem>
     ))} */}
-  </Layout>
+  </>
   )
 }
 

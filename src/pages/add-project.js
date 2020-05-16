@@ -49,9 +49,9 @@ const AddProject = () => {
 
   if (initialising) {
     return (
-      <Layout>
+      <>
         <p>Loading...</p>
-      </Layout>
+      </>
     );
   }
 
@@ -60,13 +60,13 @@ const AddProject = () => {
   }
 
   if (!user.emailVerified){
-    return <Layout>
+    return <>
       <p>You must verify your email to create a project</p>
-    </Layout>
+    </>
   }
 
   return (
-    <Layout>
+    <>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField>
           <strong>Choose a fitting title for your project</strong>
@@ -87,7 +87,7 @@ const AddProject = () => {
         {success && <SuccessMessage>Your project was added! It may take som time before it is public.</SuccessMessage>}
         <Button type="submit" value="Add new project" block />
       </Form>
-    </Layout>
+    </>
   )
 }
 

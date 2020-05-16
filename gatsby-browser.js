@@ -6,8 +6,14 @@
 
 // You can delete this file if you're not using it
 
-import 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
-import 'firebase/functions';
-import 'firebase/storage';
+
+require('firebase/firestore');
+require('firebase/auth');
+require('firebase/functions');
+
+const React = require('react')
+const Layout = require('./src/components/layout').default
+
+exports.wrapPageElement = ({element, props}) => {
+    return <Layout {...props}>{element}</Layout>
+}
