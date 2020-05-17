@@ -50,17 +50,16 @@ const CommentListItem = styled.div`
   padding: 4px 0;
 `
 
-let db, auth;
+let db,
 
 if(typeof window !== "undefined") {
   db = firebase.firestore();
-  auth = firebase.auth();
 }
 
 export const ProjectComments = ({ id }) => {
 
   const { register, handleSubmit, errors, reset } = useForm()
-  const [user, initialising, authError] = useAuthState(auth)
+  const [user, initialising, authError] = useAuthState(firebase.auth())
   const [data, loading, dataError] = useCollectionData(
     db.collection('projects')
       .doc(id)
