@@ -8,6 +8,12 @@ import styled from 'styled-components'
 
 import { ErrorMsg, Input, Button } from './FormElements'
 
+const CommentError = styled.p`
+  color: #707070;
+  font-style: italic;
+  margin-top: 32px;
+`
+
 const CommentForm = styled.form`
   display: flex;
   margin-top: 32px;
@@ -44,13 +50,19 @@ const CommentListItem = styled.div`
   padding: 4px 0;
 `
 
+let db, auth;
+
+if(typeof window !== "undefined") {
+  db = firebase.firestore();
+  auth = firebase.auth();
+}
+
 export const ProjectComments = ({ id }) => {
 
   const { register, handleSubmit, errors, reset } = useForm()
-  const [user, initialising, authError] = useAuthState(firebase.auth())
+  const [user, initialising, authError] = useAuthState(auth)
   const [data, loading, dataError] = useCollectionData(
-    firebase.firestore()
-      .collection('projects')
+    db.collection('projects')
       .doc(id)
       .collection('comments')
       .orderBy('createdAt', 'desc'),
@@ -62,16 +74,18 @@ export const ProjectComments = ({ id }) => {
 
   const [dbError, setDbError] = useState(null)
 
-  async function onSubmit(data){
+  function onSubmit(data){
     firebase.functions()
     .httpsCallable('postComment')({
       message: data.message,
       id,
       username: user.displayName})
-    .catch((error) => {
-      console.log(error)
+    .then(() => {
+      reset()
+    }).catch((error) => {
+      setDbError(error.message)
     })
-    reset()
+    
   }
 
   if (loading) {
@@ -82,12 +96,16 @@ export const ProjectComments = ({ id }) => {
 
   return (
     <div>
-      <CommentForm onSubmit={handleSubmit(onSubmit)}>
+      {authError && <CommentError>authError.message</CommentError>}
+      {(!initialising && !user) && <CommentError>You must be logged in to post a comment</CommentError>}
+      {(!initialising && user) &&
+       <CommentForm onSubmit={handleSubmit(onSubmit)}>
         <Input name="message" placeholder="Comment" ref={register({required: true})} />
         {errors.message && <ErrorMsg>The message cannot be empty</ErrorMsg>}
         {dbError && <ErrorMsg>{dbError}</ErrorMsg>}
         <Button type="submit" value="Post Comment" />
-      </CommentForm>  
+      </CommentForm>}
+      {dataError && <CommentError>{dataError.message}</CommentError>}  
       {data.map(comment => (
         <CommentListItem key={comment.id}>
           <div>

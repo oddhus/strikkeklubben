@@ -5,16 +5,15 @@ import { ProjectComments } from '../components/Common/ProjectComments'
 
 const ProjectTemplate = (props) => {
   return (
-    <>
+    <section>
       <ProjectItem
         cover={props.data.projects.localImage.childImageSharp.fixed}
         title={props.data.projects.title}
         author={props.data.projects.author}
         description={props.data.projects.description}
-      >
-      </ProjectItem>
+      />
       <ProjectComments id={props.data.projects.uid} />
-    </>
+    </section>
   )
 }
 
