@@ -5,8 +5,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 import { ErrorMsg, Form, Input, Button } from '../components/Common/FormElements'
 
-import Layout from "../components/layout"
-
 const Login = () => {
   const { register, handleSubmit, errors } = useForm()
   const [user, initialising, error] = useAuthState(firebase.auth())
