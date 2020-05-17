@@ -50,18 +50,13 @@ const CommentListItem = styled.div`
   padding: 4px 0;
 `
 
-let db,
-
-if(typeof window !== "undefined") {
-  db = firebase.firestore();
-}
-
 export const ProjectComments = ({ id }) => {
 
   const { register, handleSubmit, errors, reset } = useForm()
   const [user, initialising, authError] = useAuthState(firebase.auth())
   const [data, loading, dataError] = useCollectionData(
-    db.collection('projects')
+    firebase.firestore()
+      .collection('projects')
       .doc(id)
       .collection('comments')
       .orderBy('createdAt', 'desc'),
