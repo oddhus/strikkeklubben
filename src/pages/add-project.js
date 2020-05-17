@@ -5,7 +5,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 import styled from 'styled-components'
 
-import Layout from "../components/layout"
 import { ErrorMsg, Form, Input, Button, TextArea } from '../components/Common/FormElements'
 
 const FormField = styled.div`

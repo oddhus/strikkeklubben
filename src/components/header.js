@@ -1,8 +1,7 @@
 import { Link, navigate } from "gatsby"
 import PropTypes from "prop-types"
-import React, { useState } from "react"
+import React from "react"
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore'
 import firebase from "gatsby-plugin-firebase"
 import styled from 'styled-components'
 
@@ -65,13 +64,18 @@ const LoginLink = styled.div`
     color: white
   }
 `
+let auth
+
+if(typeof window !== "undefined") {
+  auth = firebase.auth();
+}
 
 const Header = ({ siteTitle }) => {
 
-  const [user, initialising, error] = useAuthState(firebase.auth())
+  const [user, initialising, error] = useAuthState(auth)
 
   function handleLogoutClick() {
-    firebase.auth().signOut()
+    auth.signOut()
     navigate('/login')
   }
 

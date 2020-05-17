@@ -33,7 +33,7 @@ const ProjectItem = ({author, title, description, children, cover}) => {
     return (
         <ProjectItemWrapper>
             <ProjectItemImageWrapper>
-                <Img fixed={cover} alt="Strikke prosjekt"  />
+                <Img fixed={cover} alt="Strikkeprosjekt"  />
             </ProjectItemImageWrapper>
             <ProjectItemContentWrapper>
                 <h2>{title} <small>{author}</small></h2>
