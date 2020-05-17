@@ -12,7 +12,7 @@ const ProjectTemplate = (props) => {
         author={props.data.projects.author}
         description={props.data.projects.description}
       />
-      <ProjectComments id={props.data.projects.uid} />
+      {/* <ProjectComments id={props.data.projects.uid} /> */}
     </section>
   )
 }
