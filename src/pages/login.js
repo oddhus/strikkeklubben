@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
-import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
+
 import { ErrorMsg, Form, Input, Button } from '../components/Common/FormElements'
 
 const Login = () => {
   const { register, handleSubmit, errors } = useForm()
-  const [user, initialising, error] = useAuthState(firebase.auth())
   const [dbError, setDbError] = useState(null)
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      setUser(user)
+    })
+    return () => unsubscribe()
+  }, [setUser])
+
+  useEffect(() => {
+    if(user){
+      navigate('/')
+    }
+  })
 
   function onSubmit(data){
     firebase.auth().signInWithEmailAndPassword(
       data.email,
       data.password
-    ).catch(error =>{
+    ).then(() => {
+      navigate(`/`)
+    }).catch(error =>{
       setDbError(error.message)
     })
-  }
-
-  if (initialising) {
-    return (
-      <>
-        <p>Loading user...</p>
-      </>
-    )
-  }
-
-  if (user){
-    navigate(`/`)
   }
 
   return (
@@ -42,7 +45,7 @@ const Login = () => {
           <Button type="submit" value="Login" block/>
       </Form>
     </>
-  );
+  )
 }
 
 export default Login

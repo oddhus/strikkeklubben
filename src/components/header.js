@@ -1,7 +1,6 @@
 import { Link, navigate } from "gatsby"
 import PropTypes from "prop-types"
-import React from "react"
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React, {useState, useEffect} from "react"
 import firebase from "gatsby-plugin-firebase"
 import styled from 'styled-components'
 
@@ -64,19 +63,27 @@ const LoginLink = styled.div`
     color: white
   }
 `
-let auth
-
-if(typeof window !== "undefined") {
-  auth = firebase.auth();
-}
 
 const Header = ({ siteTitle }) => {
 
-  const [user, initialising, error] = useAuthState(auth)
+  const [user, setUser] = useState(null)
+  const [dbError, setDbError] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      setUser(user)
+    })
+    return () => unsubscribe()
+  }, [setUser])
+
 
   function handleLogoutClick() {
-    auth.signOut()
-    navigate('/login')
+    firebase.auth().signOut()
+    .then(() => {
+      navigate('/login')
+    }).catch((error)=>{
+      setDbError(error.message)
+    })
   }
 
   return (
@@ -88,22 +95,25 @@ const Header = ({ siteTitle }) => {
           </Link>
         </h1>
         <div>
-          {(!initialising && user) && 
+          {dbError && <UserInfo><p>dbError</p></UserInfo>}
+          {(user) &&
             <UserInfo>
               <p>Hello, {user.displayName || user.email}</p>
               <div>
-                {user.emailVerified &&
-                  <VertifiedUserLink>
-                    <Link to="/add-project">Add project</Link>
-                  </VertifiedUserLink>
-                }
+                <VertifiedUserLink>
+                  <Link to="/account">Account</Link>
+                </VertifiedUserLink>
+                <Divider />
+                <VertifiedUserLink>
+                  <Link to="/add-project">Add project</Link>
+                </VertifiedUserLink>
                 <Divider />
                 <LogoutLink onClick={handleLogoutClick}>
                   Logout
                 </LogoutLink>
               </div>
             </UserInfo>}
-           {(!initialising && !user) &&
+          {(!user) &&
             <LoginLink>
               <Link to="/login">
                 Login
@@ -113,9 +123,9 @@ const Header = ({ siteTitle }) => {
                 Register
               </Link>
             </LoginLink>
-           } 
+          }
         </div>
-        </HeaderContent>
+      </HeaderContent>
     </HeaderWrapper>
   )
 }

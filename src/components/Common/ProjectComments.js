@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import firebase from "gatsby-plugin-firebase"
 import moment from 'moment'
 import { useForm } from 'react-hook-form'
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore'
 import styled from 'styled-components'
 
 import { ErrorMsg, Input, Button } from './FormElements'
@@ -53,20 +51,33 @@ const CommentListItem = styled.div`
 export const ProjectComments = ({ id }) => {
 
   const { register, handleSubmit, errors, reset } = useForm()
-  const [user, initialising, authError] = useAuthState(firebase.auth())
-  const [data, loading, dataError] = useCollectionData(
-    firebase.firestore()
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [user, setUser] = useState(null)
+  const [comments, setComments] = useState([])
+  const [dbError, setDbError] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      setUser(user)
+    })
+    return () => unsubscribe()
+  }, [setUser])
+
+  useEffect(() => {
+    const unsubscribe = firebase.firestore()
       .collection('projects')
       .doc(id)
       .collection('comments')
-      .orderBy('createdAt', 'desc'),
-    {
-      idField: "id",
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
-  )
-
-  const [dbError, setDbError] = useState(null)
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snapshot) => {
+        setIsLoaded(true)
+        setComments(snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        })))
+      })
+    return () => unsubscribe()
+  }, [setComments, id])
 
   function onSubmit(data){
     firebase.functions()
@@ -79,10 +90,9 @@ export const ProjectComments = ({ id }) => {
     }).catch((error) => {
       setDbError(error.message)
     })
-    
   }
 
-  if (loading) {
+  if (!isLoaded) {
     return (
       <div>Loading...</div>
     )
@@ -90,17 +100,17 @@ export const ProjectComments = ({ id }) => {
 
   return (
     <div>
-      {authError && <CommentError>authError.message</CommentError>}
-      {(!initialising && !user) && <CommentError>You must be logged in to post a comment</CommentError>}
-      {(!initialising && user) &&
+      {/* {authError && <CommentError>authError.message</CommentError>} */}
+      {(!user) && <CommentError>You must be logged in to post a comment</CommentError>}
+      {(user) &&
        <CommentForm onSubmit={handleSubmit(onSubmit)}>
         <Input name="message" placeholder="Comment" ref={register({required: true})} />
         {errors.message && <ErrorMsg>The message cannot be empty</ErrorMsg>}
         {dbError && <ErrorMsg>{dbError}</ErrorMsg>}
         <Button type="submit" value="Post Comment" />
       </CommentForm>}
-      {dataError && <CommentError>{dataError.message}</CommentError>}  
-      {data.map(comment => (
+      {/* {dataError && <CommentError>{dataError.message}</CommentError>}   */}
+      {comments.map(comment => (
         <CommentListItem key={comment.id}>
           <div>
             <strong>{comment.author}</strong>

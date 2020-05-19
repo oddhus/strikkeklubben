@@ -1,11 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
-import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 import styled from 'styled-components'
 
 import { ErrorMsg, Form, Input, Button, TextArea } from '../components/Common/FormElements'
+
+export const ContentContainer = styled.div`
+    max-width: 500px;
+    margin: 0 auto;
+`
 
 const FormField = styled.div`
     margin-bottom: 20px
@@ -25,9 +29,21 @@ if (typeof window !== 'undefined'){
 
 const AddProject = () => {
   const { register, handleSubmit, errors, reset } = useForm()
-  const [user, initialising, error] = useAuthState(firebase.auth())
   const [dbError, setDbError] = useState(null)
   const [success, setSuccess] = useState(false)
+  const [loading, setloading] = useState(true)
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      setUser(user)
+      setloading(false)
+      if (!user) {
+        navigate("/login")
+      }  
+    })
+    return () => unsubscribe()
+  }, [setUser])
 
   async function onSubmit({ title, desc, image }) {
     const transformedImg = await toBase64(image[0])
@@ -46,26 +62,23 @@ const AddProject = () => {
     reader.onerror = error => reject(error);
   });
 
-  if (initialising) {
+  if (loading) {
     return (
-      <>
+      <ContentContainer>
         <p>Loading...</p>
-      </>
-    );
+      </ContentContainer>
+    )
   }
 
-  if (!user) {
-    navigate(`/login`)
-  }
-
-  if (!user.emailVerified){
-    return <>
+  
+  if (user && !user.emailVerified){
+    return <ContentContainer>
       <p>You must verify your email to create a project</p>
-    </>
+    </ContentContainer>
   }
 
   return (
-    <>
+    <ContentContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField>
           <strong>Choose a fitting title for your project</strong>
@@ -86,7 +99,7 @@ const AddProject = () => {
         {success && <SuccessMessage>Your project was added! It may take som time before it is public.</SuccessMessage>}
         <Button type="submit" value="Add new project" block />
       </Form>
-    </>
+    </ContentContainer>
   )
 }
 

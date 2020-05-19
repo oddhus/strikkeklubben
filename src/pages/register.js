@@ -1,7 +1,6 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
-import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from "gatsby-plugin-firebase"
 
 import { ErrorMsg, Form, Input, Button } from '../components/Common/FormElements'
@@ -11,8 +10,15 @@ const Register = () => {
   const password = useRef({})
   password.current = watch("password", "")
 
-  const [user, initialising, error] = useAuthState(firebase.auth())
+  const [user, setUser] = useState(null)
   const [dbError, setDbError] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      setUser(user)
+    })
+    return () => unsubscribe()
+  }, [setUser])
 
   function onSubmit({email, password, username}){
     firebase.auth().createUserWithEmailAndPassword(email, password).then((userProfile) => {
@@ -31,13 +37,13 @@ const Register = () => {
     return user.empty
   }
 
-  if (initialising) {
-    return (
-      <>
-        <p>Loading...</p>
-      </>
-    );
-  }
+  // if (initialising) {
+  //   return (
+  //     <>
+  //       <p>Loading...</p>
+  //     </>
+  //   );
+  // }
 
   if (user) {
     navigate(`/`)
