@@ -67,20 +67,6 @@ exports.createPages = async ({graphql, actions}) => {
       path: `/project/${project.node.uid}`,
       component: projectTemplate,
       context: {projectId: project.node.uid}
-
-    // return await app
-    //     .firestore()
-    //     .collection('projects')
-    //     .get()
-    //     .then((result) => {
-    //         result.forEach(project => {
-    //             createPage({
-    //                 path: `/project/${project.id}`,
-    //                 component: projectTemplate,
-    //                 context: project.data()
-    //             })
-    //         })
-    //     })
 })
 })
 }
