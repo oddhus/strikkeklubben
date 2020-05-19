@@ -17,7 +17,6 @@ exports.onCreateNode = async ({ actions, createContentDigest, createNodeId }) =>
   const data = await admin.firestore()
       .collection('projects')
       .where('isPublic','==',true)
-      .orderBy('createdAt', 'desc')
       .get()
   
   const photos = data.docs.map(doc => {
